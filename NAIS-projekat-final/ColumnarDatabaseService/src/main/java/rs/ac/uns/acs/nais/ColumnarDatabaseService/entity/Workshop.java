@@ -9,7 +9,9 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -24,7 +26,7 @@ public class Workshop {
     private String category;
 
     @PrimaryKeyColumn(name = "date", ordinal = 1, ordering = Ordering.ASCENDING)
-    private LocalDateTime date;
+    private LocalDate date;
 
     private boolean is_online;
 
@@ -34,11 +36,13 @@ public class Workshop {
 
     private String description;
 
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
-    private LocalDateTime endTime;
+    private LocalTime endTime;
 
     private String name;
+
+    private Long hallId;
 
 
     private int max_attendees;
@@ -59,11 +63,11 @@ public class Workshop {
         this.category = category;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -77,6 +81,15 @@ public class Workshop {
 
     public double getPrice() {
         return price;
+    }
+
+    public Long getHallId() {
+        return hallId;
+    }
+
+
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
     }
 
     public void setPrice(double price) {
@@ -99,19 +112,19 @@ public class Workshop {
         this.description = description;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 

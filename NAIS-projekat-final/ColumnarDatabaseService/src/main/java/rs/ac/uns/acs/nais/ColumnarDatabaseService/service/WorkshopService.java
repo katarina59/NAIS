@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDateDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Workshop;
 
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.WorkshopRepository;
@@ -18,6 +19,9 @@ public class WorkshopService {
 
     @Autowired
     private WorkshopRepository workshopRepository;
+
+    @Autowired
+    private HallService hallService;
 
     @Autowired
     private ModelMapper mapper;
@@ -50,5 +54,11 @@ public class WorkshopService {
     private WorkshopDTO mapToDTO(Workshop workshop){
         WorkshopDTO workshopDTO= mapper.map(workshop, WorkshopDTO.class);
         return workshopDTO;
+    }
+
+    //prvi slozeni
+    public List<WorkshopDateDTO> getByHall(){
+        Long hall_id = hallService.getCheapestHall();
+        return workshopRepository.getByHall(hall_id);
     }
 }
