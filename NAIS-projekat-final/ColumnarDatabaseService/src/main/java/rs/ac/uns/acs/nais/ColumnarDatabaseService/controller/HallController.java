@@ -39,4 +39,9 @@ public class HallController {
     public ResponseEntity<HallDTO> update(@RequestBody HallDTO hallDTO, @PathVariable Long id){
         return  new ResponseEntity<>(hallService.update(hallDTO, id), HttpStatus.OK);
     }
+
+    @GetMapping("/cheapest")
+    public ResponseEntity<Long> getCheapestHall(){
+        return new ResponseEntity<>(hallService.getCheapestHall(), HttpStatus.OK);
+    }
 }
