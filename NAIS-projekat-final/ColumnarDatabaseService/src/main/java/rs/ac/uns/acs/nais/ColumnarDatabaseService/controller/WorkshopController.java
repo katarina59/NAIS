@@ -42,4 +42,6 @@ public class WorkshopController {
         return  new ResponseEntity<>(workshopService.getByHall(), HttpStatus.OK);
     }
 
+
+
 }

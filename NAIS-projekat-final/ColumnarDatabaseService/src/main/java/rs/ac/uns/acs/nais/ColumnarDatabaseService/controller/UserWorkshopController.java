@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserWorkshopDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopsUserCountDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.HallService;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.UserWorkshopService;
@@ -40,5 +41,10 @@ public class UserWorkshopController {
     @PutMapping("/update/{user_id}/{workshop_id}")
     public ResponseEntity<UserWorkshopDTO> update(@RequestBody UserWorkshopDTO userWorkshopDTO, @PathVariable Long user_id, @PathVariable Long workshop_id){
         return  new ResponseEntity<>(userWorkshopService.update(userWorkshopDTO, user_id, workshop_id), HttpStatus.OK);
+    }
+
+    @GetMapping("/attendeesByWorkshop")
+    public ResponseEntity<List<WorkshopsUserCountDTO>> getAttendeesByWorkshop(){
+        return  new ResponseEntity<>(userWorkshopService.getAttendeesByWorkshop(), HttpStatus.OK);
     }
 }

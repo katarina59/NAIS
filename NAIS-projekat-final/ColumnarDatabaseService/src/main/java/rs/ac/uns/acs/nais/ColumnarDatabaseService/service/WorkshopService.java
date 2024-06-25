@@ -61,4 +61,8 @@ public class WorkshopService {
         Long hall_id = hallService.getCheapestHall();
         return workshopRepository.getByHall(hall_id);
     }
+
+    public List<Long> getWorkshopBycategory(){
+        return workshopRepository.getWorkshopsByCategory();
+    }
 }

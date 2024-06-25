@@ -53,4 +53,6 @@ public class FeedbackWorkshopController {
     public ResponseEntity<FeedbackCountByMaleDTO> countFeedbacksByMale(){
         return new ResponseEntity<>(feedbackWorkshopService.countFeedbacksByMale(), HttpStatus.OK);
     }
+
+
 }

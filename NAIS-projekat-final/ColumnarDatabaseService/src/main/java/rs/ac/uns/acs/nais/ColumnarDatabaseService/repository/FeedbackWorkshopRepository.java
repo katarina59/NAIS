@@ -17,7 +17,10 @@ public interface FeedbackWorkshopRepository extends CassandraRepository<Feedback
     @Query("SELECT * from feedbacks WHERE workshop_id = :w_id and user_id = :u_id")
     FeedbackWorkshop getById(@Param("w_id")Long w_id, @Param("u_id") Long u_id);
 
-//    select  count(*) as number_comm, avg(price_grade) as avg_price from nais.feedbacks where user_id in (1, 3, 5, 7, 9) allow filtering
+    @Query("SELECT max(final_grade) FROM feedbacks")
+    Double getMaxFinalGrade();
+    @Query("SELECT user_id FROM feedbacks where final_grade = :max_final_grade ALLOW FILTERING")
+    Long getUserIdByFinalGrade(@Param("max_final_grade")Double max_final_grade);
 
 
 

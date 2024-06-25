@@ -11,11 +11,11 @@ import java.util.UUID;
 @Table("halls")
 public class Hall {
 
-    @PrimaryKeyColumn(name = "hall_id", type = PrimaryKeyType.PARTITIONED)
-    private Long hallId;
-
-    @PrimaryKeyColumn(name = "location", ordinal = 0, ordering = Ordering.ASCENDING)
+    @PrimaryKeyColumn(name = "location", type = PrimaryKeyType.PARTITIONED)
     private String location;
+
+    @PrimaryKeyColumn(name = "hall_id", ordinal = 0, ordering = Ordering.ASCENDING)
+    private Long hallId;
 
     @Column("name")
     private String name;

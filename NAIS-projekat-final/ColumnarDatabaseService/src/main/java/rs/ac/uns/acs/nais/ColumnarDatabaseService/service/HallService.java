@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.LocationStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Workshop;
@@ -65,5 +66,9 @@ public class HallService {
     public Long getCheapestHall(){
         Double price =  hallRepository.getLowestPrice();
         return hallRepository.getCheapestHall(price);
+    }
+
+    public List<LocationStatisticsDTO> getLocationstatistics(){
+        return hallRepository.getLocationStatistics();
     }
 }

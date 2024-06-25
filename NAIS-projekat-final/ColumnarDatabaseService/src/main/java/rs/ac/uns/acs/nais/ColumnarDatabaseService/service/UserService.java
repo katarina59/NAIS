@@ -7,6 +7,7 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.User;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.FeedbackWorkshopRepository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.HallRepository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.UserRepository;
 
@@ -18,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FeedbackWorkshopRepository feedbackWorkshopRepository;
 
     @Autowired
     private ModelMapper mapper;
@@ -68,5 +72,12 @@ public class UserService {
 
     public List<Long> getMaleUsers(){
          return userRepository.getMaleUser();
+    }
+
+
+    public UserDTO getUserDataByFinalGrade(){
+            Double max_final_grade = feedbackWorkshopRepository.getMaxFinalGrade();
+            Long user_id = feedbackWorkshopRepository.getUserIdByFinalGrade(max_final_grade);
+            return mapToDTO(userRepository.getUserDataByFinalGrade(user_id));
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.LocationStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.HallService;
 
@@ -43,5 +44,10 @@ public class HallController {
     @GetMapping("/cheapest")
     public ResponseEntity<Long> getCheapestHall(){
         return new ResponseEntity<>(hallService.getCheapestHall(), HttpStatus.OK);
+    }
+
+    @GetMapping("/locationStatistics")
+    public ResponseEntity<List<LocationStatisticsDTO>> getLocationStatistics(){
+        return new ResponseEntity<>(hallService.getLocationstatistics(), HttpStatus.OK);
     }
 }
