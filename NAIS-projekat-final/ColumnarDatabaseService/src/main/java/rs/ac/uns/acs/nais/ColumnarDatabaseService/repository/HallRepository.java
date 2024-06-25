@@ -12,4 +12,10 @@ public interface HallRepository extends CassandraRepository<Hall, Long> {
 
     @Query("SELECT * from halls WHERE hall_id = :id")
     Hall getById(@Param("id")Long id);
+
+    @Query("SELECT min(booking_fee) from halls")
+    Double getLowestPrice();
+
+    @Query("SELECT hall_id from halls where booking_fee = :min_fee ALLOW FILTERING")
+    Long getCheapestHall(@Param("min_fee")Double min_fee);
 }

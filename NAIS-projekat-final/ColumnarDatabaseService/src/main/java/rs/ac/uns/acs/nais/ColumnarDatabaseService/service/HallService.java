@@ -61,4 +61,9 @@ public class HallService {
         hall.setLocation(hallDTO.getLocation());
         return mapToDTO(hallRepository.save(hall));
     }
+
+    public Long getCheapestHall(){
+        Double price =  hallRepository.getLowestPrice();
+        return hallRepository.getCheapestHall(price);
+    }
 }

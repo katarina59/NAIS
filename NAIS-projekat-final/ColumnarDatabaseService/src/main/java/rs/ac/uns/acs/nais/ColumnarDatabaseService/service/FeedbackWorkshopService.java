@@ -3,6 +3,7 @@ package rs.ac.uns.acs.nais.ColumnarDatabaseService.service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackAverageDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackWorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.FeedbackWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.FeedbackWorkshopRepository;
@@ -59,5 +60,10 @@ public class FeedbackWorkshopService {
        return mapToDTO(feedbackWorkshopRepository.save(feedbackWorkshop));
 
 
+    }
+
+
+    public List<FeedbackAverageDTO> calculateStatisticsForWorkshop(){
+        return feedbackWorkshopRepository.calculateStatisticsForWorkshop();
     }
 }

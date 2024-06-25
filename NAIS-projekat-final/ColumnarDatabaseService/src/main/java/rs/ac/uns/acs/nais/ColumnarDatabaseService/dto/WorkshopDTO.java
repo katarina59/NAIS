@@ -9,7 +9,9 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 
 import javax.management.ConstructorParameters;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -20,7 +22,7 @@ public class WorkshopDTO {
 
     private String category;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
     private boolean is_online;
 
@@ -30,11 +32,13 @@ public class WorkshopDTO {
 
     private String description;
 
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
-    private LocalDateTime endTime;
+    private LocalTime endTime;
 
     private String name;
+
+    private Long hallId;
 
     private int max_attendees;
 
@@ -54,11 +58,11 @@ public class WorkshopDTO {
         this.category = category;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -72,6 +76,15 @@ public class WorkshopDTO {
 
     public double getPrice() {
         return price;
+    }
+
+    public Long getHallId() {
+        return hallId;
+    }
+
+
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
     }
 
     public Long getPsychologistId() {
@@ -94,19 +107,19 @@ public class WorkshopDTO {
         this.description = description;
     }
 
-    public LocalDateTime getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalDateTime getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 

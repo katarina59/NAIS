@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.OrderDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDateDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.WorkshopService;
 
 import java.util.List;
@@ -34,6 +35,11 @@ public class WorkshopController {
     @DeleteMapping("/{id}")
     public ResponseEntity<WorkshopDTO> deleteWorkshop(@PathVariable Long id){
         return new ResponseEntity<>(workshopService.deleteWorkshop(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/getByHall")
+    public ResponseEntity<List<WorkshopDateDTO>> getByHall(){
+        return  new ResponseEntity<>(workshopService.getByHall(), HttpStatus.OK);
     }
 
 }
