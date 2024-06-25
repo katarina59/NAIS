@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackAverageDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackCountByMaleDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackWorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserWorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.FeedbackWorkshop;
@@ -46,5 +47,10 @@ public class FeedbackWorkshopController {
     @GetMapping("/statisticsAverage")
     public ResponseEntity<List<FeedbackAverageDTO>> calculateStatisticsForWorkshop(){
         return new ResponseEntity<>(feedbackWorkshopService.calculateStatisticsForWorkshop(), HttpStatus.OK);
+    }
+
+    @GetMapping("/feedbacksByMale")
+    public ResponseEntity<FeedbackCountByMaleDTO> countFeedbacksByMale(){
+        return new ResponseEntity<>(feedbackWorkshopService.countFeedbacksByMale(), HttpStatus.OK);
     }
 }

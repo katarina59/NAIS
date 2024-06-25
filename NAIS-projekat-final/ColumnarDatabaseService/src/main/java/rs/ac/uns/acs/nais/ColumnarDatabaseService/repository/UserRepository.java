@@ -7,9 +7,14 @@ import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.User;
 
+import java.util.List;
+
 @Repository
 public interface UserRepository extends CassandraRepository<User, Long> {
 
     @Query("SELECT * from users WHERE user_id = :id")
     User getById(@Param("id")Long id);
+
+    @Query("SELECT user_id FROM users WHERE gender = 'male' ALLOW FILTERING")
+    List<Long> getMaleUser();
 }

@@ -40,4 +40,9 @@ public class UserController {
     public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO, @PathVariable Long id){
         return  new ResponseEntity<>(userService.update(userDTO, id), HttpStatus.OK);
     }
+
+    @GetMapping("/maleUsers")
+    public ResponseEntity<List<Long>> getMaleUsers(){
+        return  new ResponseEntity<>(userService.getMaleUsers(), HttpStatus.OK);
+    }
 }
