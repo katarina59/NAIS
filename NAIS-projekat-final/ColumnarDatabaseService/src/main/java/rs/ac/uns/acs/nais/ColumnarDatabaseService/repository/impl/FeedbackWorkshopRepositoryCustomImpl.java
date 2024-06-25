@@ -1,13 +1,17 @@
 package rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.impl;
 
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.cassandra.core.cql.CqlTemplate;
+import org.springframework.data.cassandra.core.cql.*;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackAverageDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackCountByMaleDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.FeedbackWorkshopRepositoryCustom;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigInteger;
+import java.util.*;
+
 @Repository
 public class FeedbackWorkshopRepositoryCustomImpl implements FeedbackWorkshopRepositoryCustom {
 
@@ -37,5 +41,19 @@ public class FeedbackWorkshopRepositoryCustomImpl implements FeedbackWorkshopRep
         });
 
         return dtos;
+    }
+
+    @Override
+    public FeedbackCountByMaleDTO countFeedbacksByMale(List<Long> user_ids) {
+        String cqlQuery = "SELECT count(*) as feedbackCount, avg(price_grade) as averagePriceGrade FROM feedbacks WHERE user_id in ? ALLOW FILTERING";
+
+        FeedbackCountByMaleDTO dto = new FeedbackCountByMaleDTO();
+
+        template.query((PreparedStatementCreator) session -> session.prepare(cqlQuery),
+                ps -> ps.bind(user_ids),
+                (RowCallbackHandler) row -> {dto.setFeedbackCount(row.getLong("feedbackCount")); dto.setAveragePriceGrade(row.getDouble("averagePriceGrade"));}
+        );
+
+        return dto;
     }
 }
