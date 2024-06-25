@@ -26,8 +26,8 @@ public class HallCustomImpl implements HallCustom {
                 (PreparedStatementBinder) ps -> ps.bind(location),
                 (RowCallbackHandler) row -> {
                     dto.setLocation(row.getString("location"));
-                    dto.setTotalHalls(row.getLong("total_halls")); // Korišćenje row.getLong za long tip
-                    dto.setTotalCapacity(row.getInt("total_capacity")); // Korišćenje row.getLong za long tip
+                    dto.setTotalHalls(row.getLong("total_halls"));
+                    dto.setTotalCapacity(row.getInt("total_capacity"));
                     dto.setAvgBookingFee(row.getDouble("avg_booking_fee"));
                 }
         );

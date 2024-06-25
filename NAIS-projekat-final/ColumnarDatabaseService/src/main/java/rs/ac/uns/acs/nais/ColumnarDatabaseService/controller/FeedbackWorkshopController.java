@@ -1,7 +1,9 @@
 package rs.ac.uns.acs.nais.ColumnarDatabaseService.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackAverageDTO;
@@ -12,6 +14,7 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.FeedbackWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.FeedbackWorkshopService;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.UserWorkshopService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -52,5 +55,23 @@ public class FeedbackWorkshopController {
     @GetMapping("/feedbacksByMale")
     public ResponseEntity<FeedbackCountByMaleDTO> countFeedbacksByMale(){
         return new ResponseEntity<>(feedbackWorkshopService.countFeedbacksByMale(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportPdf() {
+        List<FeedbackAverageDTO> statistics = feedbackWorkshopService.calculateStatisticsForWorkshop();
+        try {
+            byte[] pdfContents = feedbackWorkshopService.exportFeedbackStatistics(statistics);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "products.pdf");
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfContents);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

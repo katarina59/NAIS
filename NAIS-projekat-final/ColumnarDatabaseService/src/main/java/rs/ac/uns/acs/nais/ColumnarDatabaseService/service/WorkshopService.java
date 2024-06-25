@@ -1,5 +1,10 @@
 package rs.ac.uns.acs.nais.ColumnarDatabaseService.service;
 
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +13,14 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Workshop;
 
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.WorkshopRepository;
 
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -113,6 +126,10 @@ public class WorkshopService {
         double malePercentage = totalCountInWorkshop > 0 ? (double) maleCountInWorkshop / totalCountInWorkshop * 100 : 0;
         double femalePercentage = totalCountInWorkshop > 0 ? (double) femaleCountInWorkshop / totalCountInWorkshop * 100 : 0;
 
+        BigDecimal malePercentageRounded = BigDecimal.valueOf(malePercentage).setScale(2, RoundingMode.HALF_UP);
+        BigDecimal femalePercentageRounded = BigDecimal.valueOf(femalePercentage).setScale(2, RoundingMode.HALF_UP);
+
+
         WorkshopWithGenderPercentageDTO dto = new WorkshopWithGenderPercentageDTO();
         dto.setWorkshopId(workshop.getWorkshopId());
         dto.setCategory(workshop.getCategory());
@@ -125,10 +142,76 @@ public class WorkshopService {
         dto.setMax_attendees(workshop.getMax_attendees());
         dto.setPrice(workshop.getPrice());
         dto.setPsychologistId(workshop.getPsychologistId());
-        dto.setMalePercentage(malePercentage);
-        dto.setFemalePercentage(femalePercentage);
+        dto.setMalePercentage(malePercentageRounded.doubleValue());
+        dto.setFemalePercentage(femalePercentageRounded.doubleValue());
 
         return dto;
+    }
+
+    public byte[] exportWorkshopStatistics(WorkshopWithGenderPercentageDTO dto) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        Document document = new Document();
+
+        PdfWriter.getInstance(document, byteArrayOutputStream);
+        document.open();
+
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, Font.BOLD);
+        Paragraph title = new Paragraph("WORKSHOP STATISTIC REPORT", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
+
+        // Add spacing
+        document.add(new Paragraph("\n"));
+
+        PdfPTable reportTable = new PdfPTable(2);
+        reportTable.setWidthPercentage(100);
+
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+        PdfPCell headerCell1 = new PdfPCell(new Paragraph("Attribute", headerFont));
+        PdfPCell headerCell2 = new PdfPCell(new Paragraph("Value", headerFont));
+
+        headerCell1.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell2.setBackgroundColor(new Color(110, 231, 234, 255));
+
+        reportTable.addCell(headerCell1);
+        reportTable.addCell(headerCell2);
+
+        reportTable.addCell("Workshop ID");
+        reportTable.addCell(dto.getWorkshopId().toString());
+        reportTable.addCell("Name");
+        reportTable.addCell(dto.getName());
+        reportTable.addCell("Category");
+        reportTable.addCell(dto.getCategory());
+        reportTable.addCell("Description");
+        reportTable.addCell(dto.getDescription());
+        reportTable.addCell("Date");
+        reportTable.addCell(dto.getDate().toString());
+        reportTable.addCell("Start Time");
+        reportTable.addCell(dto.getStartTime().toString());
+        reportTable.addCell("End Time");
+        reportTable.addCell(dto.getEndTime().toString());
+        reportTable.addCell("Is Online");
+        reportTable.addCell(Boolean.toString(dto.isIs_online()));
+        reportTable.addCell("Max Attendees");
+        reportTable.addCell(Integer.toString(dto.getMax_attendees()));
+        reportTable.addCell("Price");
+        reportTable.addCell(Double.toString(dto.getPrice()));
+        reportTable.addCell("Psychologist ID");
+        reportTable.addCell(Long.toString(dto.getPsychologistId()));
+        reportTable.addCell("Male Percentage");
+        reportTable.addCell(Double.toString(dto.getMalePercentage()) + "%");
+        reportTable.addCell("Female Percentage");
+        reportTable.addCell(Double.toString(dto.getFemalePercentage()) + "%");
+
+        document.add(reportTable);
+        document.close();
+
+        String filename = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) + ".pdf";
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filename)) {
+            fileOutputStream.write(byteArrayOutputStream.toByteArray());
+        }
+
+        return byteArrayOutputStream.toByteArray();
     }
 
 
