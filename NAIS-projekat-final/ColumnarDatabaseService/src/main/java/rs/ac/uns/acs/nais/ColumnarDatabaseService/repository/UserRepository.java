@@ -17,4 +17,10 @@ public interface UserRepository extends CassandraRepository<User, Long> {
 
     @Query("SELECT user_id FROM users WHERE gender = 'male' ALLOW FILTERING")
     List<Long> getMaleUser();
+
+    @Query("SELECT count(*) FROM users WHERE gender = 'male' AND user_id IN ?0 ALLOW FILTERING")
+    long countMaleUsersByIds(List<Long> userIds);
+
+    @Query("SELECT count(*) FROM users WHERE gender = 'female' AND user_id IN ?0 ALLOW FILTERING")
+    long countFemaleUsersByIds(List<Long> userIds);
 }

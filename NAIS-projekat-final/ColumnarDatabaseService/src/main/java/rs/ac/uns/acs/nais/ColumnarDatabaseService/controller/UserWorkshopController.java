@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserWorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.HallService;
@@ -41,4 +42,6 @@ public class UserWorkshopController {
     public ResponseEntity<UserWorkshopDTO> update(@RequestBody UserWorkshopDTO userWorkshopDTO, @PathVariable Long user_id, @PathVariable Long workshop_id){
         return  new ResponseEntity<>(userWorkshopService.update(userWorkshopDTO, user_id, workshop_id), HttpStatus.OK);
     }
+
+
 }

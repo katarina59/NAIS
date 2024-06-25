@@ -2,10 +2,12 @@ package rs.ac.uns.acs.nais.ColumnarDatabaseService.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.cassandra.repository.Query;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackAverageDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackCountByMaleDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackWorkshopDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopCountProjection;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.FeedbackWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.FeedbackWorkshopRepository;
 
@@ -75,4 +77,16 @@ public class FeedbackWorkshopService {
         List<Long> user_ids = userService.getMaleUsers();
         return feedbackWorkshopRepository.countFeedbacksByMale(user_ids);
     }
+
+    List<WorkshopCountProjection> countRecommendedByWorkshop(){
+        return feedbackWorkshopRepository.countRecommendedByWorkshop();
+   }
+
+    List<WorkshopCountProjection>countNotRecommendedByWorkshopId(){
+        return feedbackWorkshopRepository.countNotRecommendedByWorkshop();
+    }
+
+    List<WorkshopCountProjection> countTotalAttendeesByWorkshopId(){
+        return feedbackWorkshopRepository.countTotalAttendeesByWorkshop();
+   }
 }

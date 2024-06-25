@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserWorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
@@ -58,4 +59,13 @@ public class UserWorkshopService {
         return mapToDTO(userWorkshopRepository.save(userWorkshop));
 
     }
-}
+
+    List<Long> findUserIdsByWorkshopId(Long workshopId){
+        return userWorkshopRepository.findUserIdsByWorkshopId(workshopId);
+    }
+
+    public List<UserSessionStatisticsDTO> findUserSessionStatistics() {
+        return userWorkshopRepository.findUserSessionStatistics();
+    }
+
+    }

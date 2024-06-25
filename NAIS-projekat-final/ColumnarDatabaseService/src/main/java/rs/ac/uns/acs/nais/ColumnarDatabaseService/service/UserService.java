@@ -2,11 +2,14 @@ package rs.ac.uns.acs.nais.ColumnarDatabaseService.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.cassandra.repository.Query;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.User;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.HallRepository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.UserRepository;
 
@@ -18,6 +21,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserWorkshopService userWorkshopService;
 
     @Autowired
     private ModelMapper mapper;
@@ -68,5 +74,25 @@ public class UserService {
 
     public List<Long> getMaleUsers(){
          return userRepository.getMaleUser();
+    }
+
+    long countMaleUsersByIds(List<Long> userIds){
+            return userRepository.countMaleUsersByIds(userIds);
+    }
+
+    long countFemaleUsersByIds(List<Long> userIds){
+            return userRepository.countFemaleUsersByIds(userIds);
+    }
+
+    public List<UserSessionStatisticsDTO> getUserSessionStatistics() {
+        List<UserSessionStatisticsDTO> sessionStatistics = userWorkshopService.findUserSessionStatistics();
+
+        return sessionStatistics.stream().map(stat -> {
+            User user = userRepository.getById(stat.getUserId());
+            stat.setName(user.getName());
+            stat.setGender(user.getGender());
+            stat.setLastName(user.getLastName());
+            return stat;
+        }).collect(Collectors.toList());
     }
 }

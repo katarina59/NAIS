@@ -1,35 +1,14 @@
-package rs.ac.uns.acs.nais.ColumnarDatabaseService.entity;
-
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.cassandra.core.cql.Ordering;
-import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
-import org.springframework.data.cassandra.core.mapping.Table;
+package rs.ac.uns.acs.nais.ColumnarDatabaseService.dto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-@Getter
-@Setter
-@Table("workshops")
-public class Workshop {
-
-
-    @PrimaryKeyColumn(name= "workshop_id", type= PrimaryKeyType.PARTITIONED)
+public class WorkshopWithGenderPercentageDTO {
     private Long workshopId;
 
-    @PrimaryKeyColumn(name = "category", ordinal = 0 , ordering = Ordering.ASCENDING)
     private String category;
 
-    @PrimaryKeyColumn(name = "date", ordinal = 1, ordering = Ordering.ASCENDING)
     private LocalDate date;
-
-    @PrimaryKeyColumn(name = "hallid", ordinal = 2, ordering = Ordering.ASCENDING)
-    private Long hallId;
 
     private boolean is_online;
 
@@ -42,12 +21,6 @@ public class Workshop {
     private LocalTime startTime;
 
     private LocalTime endTime;
-
-    private String name;
-
-
-
-    private int max_attendees;
 
     public Long getWorkshopId() {
         return workshopId;
@@ -85,15 +58,6 @@ public class Workshop {
         return price;
     }
 
-    public Long getHallId() {
-        return hallId;
-    }
-
-
-    public void setHallId(Long hallId) {
-        this.hallId = hallId;
-    }
-
     public void setPrice(double price) {
         this.price = price;
     }
@@ -103,7 +67,7 @@ public class Workshop {
     }
 
     public void setPsychologistId(Long psychologistId) {
-        this.psychologistId= psychologistId;
+        this.psychologistId = psychologistId;
     }
 
     public String getDescription() {
@@ -138,11 +102,44 @@ public class Workshop {
         this.name = name;
     }
 
+    public Long getHallId() {
+        return hallId;
+    }
+
+    public void setHallId(Long hallId) {
+        this.hallId = hallId;
+    }
+
     public int getMax_attendees() {
         return max_attendees;
     }
 
-    public void setMax_attendees(int maxAttendees) {
-        this.max_attendees = maxAttendees;
+    public void setMax_attendees(int max_attendees) {
+        this.max_attendees = max_attendees;
     }
+
+    public double getMalePercentage() {
+        return malePercentage;
+    }
+
+    public void setMalePercentage(double malePercentage) {
+        this.malePercentage = malePercentage;
+    }
+
+    public double getFemalePercentage() {
+        return femalePercentage;
+    }
+
+    public void setFemalePercentage(double femalePercentage) {
+        this.femalePercentage = femalePercentage;
+    }
+
+    private String name;
+
+    private Long hallId;
+
+    private int max_attendees;
+    private double malePercentage;
+
+    private double femalePercentage;
 }
