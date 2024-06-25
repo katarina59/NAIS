@@ -1,5 +1,11 @@
 package rs.ac.uns.acs.nais.ColumnarDatabaseService.service;
 
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.Document;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +16,12 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Workshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.HallRepository;
 
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,4 +83,70 @@ public class HallService {
     public List<LocationStatisticsDTO> getLocationstatistics(){
         return hallRepository.getLocationStatistics();
     }
+
+    public List<HallDTO> getHallsForReport(){
+        return hallRepository.getHallsForReport();
+    }
+
+    public byte[] exportSimpleHallReport(List<HallDTO> statistics) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        Document document = new Document();
+
+        PdfWriter.getInstance(document, byteArrayOutputStream);
+        document.open();
+
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, Font.BOLD);
+        Paragraph title = new Paragraph("HALLS SIMPLE STATISTICS REPORT", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
+
+        // Add spacing
+        document.add(new Paragraph("\n"));
+
+        PdfPTable reportTable = new PdfPTable(6);
+        reportTable.setWidthPercentage(100);
+
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+        PdfPCell headerCell1 = new PdfPCell(new Paragraph("Hall ID", headerFont));
+        PdfPCell headerCell2 = new PdfPCell(new Paragraph("Location", headerFont));
+        PdfPCell headerCell3 = new PdfPCell(new Paragraph("Name", headerFont));
+        PdfPCell headerCell4 = new PdfPCell(new Paragraph("Capacity", headerFont));
+        PdfPCell headerCell5 = new PdfPCell(new Paragraph("Booking fee", headerFont));
+        PdfPCell headerCell6 = new PdfPCell(new Paragraph("Events Number", headerFont));
+
+        headerCell1.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell2.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell3.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell4.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell5.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell6.setBackgroundColor(new Color(110, 231, 234, 255));
+
+        reportTable.addCell(headerCell1);
+        reportTable.addCell(headerCell2);
+        reportTable.addCell(headerCell3);
+        reportTable.addCell(headerCell4);
+        reportTable.addCell(headerCell5);
+        reportTable.addCell(headerCell6);
+
+        for (HallDTO hall : statistics) {
+            reportTable.addCell(hall.getHallId().toString());
+            reportTable.addCell(hall.getLocation());
+            reportTable.addCell(hall.getName());
+            reportTable.addCell(hall.getCapacity().toString());
+            reportTable.addCell(hall.getBookingFee().toString());
+            reportTable.addCell(hall.getEventsCount().toString());
+
+        }
+
+        document.add(reportTable);
+        document.close();
+
+        String filename = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss")) + ".pdf";
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filename)) {
+            fileOutputStream.write(byteArrayOutputStream.toByteArray());
+        }
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
 }

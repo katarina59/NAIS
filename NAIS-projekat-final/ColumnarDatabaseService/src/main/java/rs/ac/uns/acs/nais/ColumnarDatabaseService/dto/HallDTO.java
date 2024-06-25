@@ -19,11 +19,11 @@ public class HallDTO {
 
     private String name;
 
-    private int capacity;
+    private Integer capacity;
 
     private Double bookingFee;
 
-    private int eventsCount;
+    private Integer eventsCount;
 
 
     public Long getHallId() {
@@ -49,11 +49,11 @@ public class HallDTO {
         this.name = name;
     }
 
-    public int getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(int capacity) {
+    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
 
@@ -65,11 +65,11 @@ public class HallDTO {
         this.bookingFee = bookingFee;
     }
 
-    public int getEventsCount() {
+    public Integer getEventsCount() {
         return eventsCount;
     }
 
-    public void setEventsCount(int eventsCount) {
+    public void setEventsCount(Integer eventsCount) {
         this.eventsCount = eventsCount;
     }
 }
