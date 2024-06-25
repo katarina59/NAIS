@@ -64,4 +64,9 @@ public class UserService {
 
             return mapToDTO(userRepository.save(user));
     }
+
+
+    public List<Long> getMaleUsers(){
+         return userRepository.getMaleUser();
+    }
 }

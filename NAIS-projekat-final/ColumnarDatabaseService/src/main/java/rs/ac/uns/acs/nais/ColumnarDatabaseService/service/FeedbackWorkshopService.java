@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackAverageDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackCountByMaleDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackWorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.FeedbackWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.FeedbackWorkshopRepository;
@@ -16,6 +17,9 @@ public class FeedbackWorkshopService {
 
     @Autowired
     private FeedbackWorkshopRepository feedbackWorkshopRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ModelMapper mapper;
@@ -65,5 +69,10 @@ public class FeedbackWorkshopService {
 
     public List<FeedbackAverageDTO> calculateStatisticsForWorkshop(){
         return feedbackWorkshopRepository.calculateStatisticsForWorkshop();
+    }
+
+    public FeedbackCountByMaleDTO countFeedbacksByMale(){
+        List<Long> user_ids = userService.getMaleUsers();
+        return feedbackWorkshopRepository.countFeedbacksByMale(user_ids);
     }
 }
