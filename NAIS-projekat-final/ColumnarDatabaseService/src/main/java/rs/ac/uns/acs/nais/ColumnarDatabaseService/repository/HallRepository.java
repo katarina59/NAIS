@@ -8,9 +8,9 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Workshop;
 
 @Repository
-public interface HallRepository extends CassandraRepository<Hall, Long> {
+public interface HallRepository extends CassandraRepository<Hall, Long>, HallRepositoryCustom {
 
-    @Query("SELECT * from halls WHERE hall_id = :id")
+    @Query("SELECT * from halls WHERE hall_id = :id allow filtering")
     Hall getById(@Param("id")Long id);
 
     @Query("SELECT min(booking_fee) from halls")
@@ -18,4 +18,6 @@ public interface HallRepository extends CassandraRepository<Hall, Long> {
 
     @Query("SELECT hall_id from halls where booking_fee = :min_fee ALLOW FILTERING")
     Long getCheapestHall(@Param("min_fee")Double min_fee);
+
+
 }

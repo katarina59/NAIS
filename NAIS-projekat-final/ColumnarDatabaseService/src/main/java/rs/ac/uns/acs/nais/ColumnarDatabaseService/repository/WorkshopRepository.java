@@ -16,4 +16,9 @@ public interface WorkshopRepository extends CassandraRepository<Workshop, Long> 
 
     @Query("SELECT name, date FROM workshops WHERE hallId = :hall_id ALLOW FILTERING")
     List<WorkshopDateDTO> getByHall(@Param("hall_id")Long hall_id);
+    @Query("SELECT workshop_id FROM workshops WHERE category in ('Anxiety', 'Depression') and is_online = true ALLOW FILTERING")
+    List<Long> getWorkshopsByCategory();
+
+
 }
+//    select workshop_id, count(*) from nais.user_workshop where workshop_id in (1, 2, 6, 15) group by workshop_id;

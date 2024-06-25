@@ -45,4 +45,9 @@ public class UserController {
     public ResponseEntity<List<Long>> getMaleUsers(){
         return  new ResponseEntity<>(userService.getMaleUsers(), HttpStatus.OK);
     }
+
+    @GetMapping("/getByFinalGrade")
+    public ResponseEntity<UserDTO> getUserDataByFinalGrade(){
+        return new ResponseEntity<>(userService.getUserDataByFinalGrade(), HttpStatus.OK);
+    }
 }

@@ -8,7 +8,7 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
 
 @Repository
-public interface UserWorkshopRepository extends CassandraRepository<UserWorkshop, Long> {
+public interface UserWorkshopRepository extends CassandraRepository<UserWorkshop, Long> , UserWorkshopRepositoryCustom{
 
     @Query("SELECT * from user_workshop WHERE user_id = :u_id and workshop_id = :w_id")
     UserWorkshop getById(@Param("u_id")Long u_id, @Param("w_id") Long w_id);
