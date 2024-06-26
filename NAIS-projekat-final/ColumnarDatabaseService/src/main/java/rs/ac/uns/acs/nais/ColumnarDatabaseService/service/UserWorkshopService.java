@@ -11,6 +11,7 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.HallRepository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.UserWorkshopRepository;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.WorkshopRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class UserWorkshopService {
     private UserWorkshopRepository userWorkshopRepository;
 
     @Autowired
-    private WorkshopService workshopService;
+    private WorkshopRepository workshopService;
 
     @Autowired
     private ModelMapper mapper;
@@ -72,10 +73,10 @@ public class UserWorkshopService {
         return userWorkshopRepository.findUserSessionStatistics();
     }
 
-    }
+
 
     public List<WorkshopsUserCountDTO> getAttendeesByWorkshop(){
-        List<Long> workshop_ids = workshopService.getWorkshopBycategory();
+        List<Long> workshop_ids = workshopService.getWorkshopsByCategory();
         return userWorkshopRepository.getAttendeesByWorkshop(workshop_ids);
     }
 }

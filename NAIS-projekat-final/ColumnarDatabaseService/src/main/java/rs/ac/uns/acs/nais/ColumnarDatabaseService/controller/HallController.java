@@ -59,7 +59,7 @@ public class HallController {
     @GetMapping("/statistics/{location}")
     public HallStatisticsDTO getHallStatistics(@PathVariable String location) {
         String decodedLocation = URLDecoder.decode(location, StandardCharsets.UTF_8);
-        return hallService.getHallStatisticsByLocation(decodedLocation);
+        return hallService.getHallStatisticsByLocation(decodedLocation);}
       
     @GetMapping("/locationStatistics")
     public ResponseEntity<List<LocationStatisticsDTO>> getLocationStatistics(){

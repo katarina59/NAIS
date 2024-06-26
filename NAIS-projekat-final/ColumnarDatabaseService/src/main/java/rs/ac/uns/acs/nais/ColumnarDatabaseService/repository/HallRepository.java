@@ -12,7 +12,7 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Workshop;
 import java.util.List;
 
 @Repository
-public interface HallRepository extends CassandraRepository<Hall, Long>,HallCustom,HallRepositoryCustom {
+public interface HallRepository extends CassandraRepository<Hall, Long>,HallRepositoryCustom {
 
     @Query("SELECT * from halls WHERE hall_id = :id allow filtering")
     Hall getById(@Param("id")Long id);

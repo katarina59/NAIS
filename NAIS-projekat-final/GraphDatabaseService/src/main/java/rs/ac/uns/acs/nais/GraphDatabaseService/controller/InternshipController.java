@@ -11,15 +11,15 @@ import rs.ac.uns.acs.nais.GraphDatabaseService.model.*;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.impl.FeedbackService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.impl.InternshipService;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.impl.StudentService;
-import com.itextpdf.io.image.ImageDataFactory;
-import com.itextpdf.kernel.colors.ColorConstants;
-import com.itextpdf.kernel.geom.PageSize;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.*;
-import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.layout.property.UnitValue;
+// import com.itextpdf.io.image.ImageDataFactory;
+// import com.itextpdf.kernel.colors.ColorConstants;
+// import com.itextpdf.kernel.geom.PageSize;
+// import com.itextpdf.kernel.pdf.PdfDocument;
+// import com.itextpdf.kernel.pdf.PdfWriter;
+// import com.itextpdf.layout.Document;
+// import com.itextpdf.layout.element.*;
+// import com.itextpdf.layout.property.TextAlignment;
+// import com.itextpdf.layout.property.UnitValue;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -118,120 +118,120 @@ public class InternshipController {
         return new ResponseEntity<>(internship, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf() {
-        // Prosti upiti
-        List<Internship> internships1 = internshipService.findInternshipsByChildCategory();
-        List<Feedback> feedbacks = feedbackService.findAboveThree();
-        // Složeni upiti
-        List<Student> students = studentService.recommendStudentsWithBestAvrageGrade(44L);
-        List<TopInternshipDTO> internships = internshipService.findTopInternshipsByCategory();
+    // @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    // public ResponseEntity<byte[]> exportPdf() {
+    //     // Prosti upiti
+    //     List<Internship> internships1 = internshipService.findInternshipsByChildCategory();
+    //     List<Feedback> feedbacks = feedbackService.findAboveThree();
+    //     // Složeni upiti
+    //     List<Student> students = studentService.recommendStudentsWithBestAvrageGrade(44L);
+    //     List<TopInternshipDTO> internships = internshipService.findTopInternshipsByCategory();
 
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            PdfWriter writer = new PdfWriter(baos);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf, PageSize.A4);
-            document.setMargins(20, 20, 20, 20);
+    //     try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+    //         PdfWriter writer = new PdfWriter(baos);
+    //         PdfDocument pdf = new PdfDocument(writer);
+    //         Document document = new Document(pdf, PageSize.A4);
+    //         document.setMargins(20, 20, 20, 20);
 
-            // Internships1 section
-            document.add(new Paragraph("Internships in CHILD_AND_ADOLESCENT_PSYCHOLOG Category")
-                    .setFontSize(18)
-                    .setBold()
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginBottom(20));
-            addInternshipsTable(document, internships1);
+    //         // Internships1 section
+    //         document.add(new Paragraph("Internships in CHILD_AND_ADOLESCENT_PSYCHOLOG Category")
+    //                 .setFontSize(18)
+    //                 .setBold()
+    //                 .setTextAlignment(TextAlignment.CENTER)
+    //                 .setMarginBottom(20));
+    //         addInternshipsTable(document, internships1);
 
-            // Feedbacks section
-            document.add(new Paragraph("Feedbacks with Rating Above 3")
-                    .setFontSize(18)
-                    .setBold()
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginTop(20)
-                    .setMarginBottom(20));
-            addFeedbacksTable(document, feedbacks);
+    //         // Feedbacks section
+    //         document.add(new Paragraph("Feedbacks with Rating Above 3")
+    //                 .setFontSize(18)
+    //                 .setBold()
+    //                 .setTextAlignment(TextAlignment.CENTER)
+    //                 .setMarginTop(20)
+    //                 .setMarginBottom(20));
+    //         addFeedbacksTable(document, feedbacks);
 
-            // Internships section
-            document.add(new Paragraph("Top Internships by Category")
-                    .setFontSize(18)
-                    .setBold()
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginTop(20)
-                    .setMarginBottom(20));
-            addTopInternshipsTable(document, internships);
+    //         // Internships section
+    //         document.add(new Paragraph("Top Internships by Category")
+    //                 .setFontSize(18)
+    //                 .setBold()
+    //                 .setTextAlignment(TextAlignment.CENTER)
+    //                 .setMarginTop(20)
+    //                 .setMarginBottom(20));
+    //         addTopInternshipsTable(document, internships);
 
-            // Students section
-            document.add(new Paragraph("Students for Clinical Psychology Intern with Above Average Grades")
-                    .setFontSize(18)
-                    .setBold()
-                    .setTextAlignment(TextAlignment.CENTER)
-                    .setMarginTop(20)
-                    .setMarginBottom(20));
-            addStudentsTable(document, students);
+    //         // Students section
+    //         document.add(new Paragraph("Students for Clinical Psychology Intern with Above Average Grades")
+    //                 .setFontSize(18)
+    //                 .setBold()
+    //                 .setTextAlignment(TextAlignment.CENTER)
+    //                 .setMarginTop(20)
+    //                 .setMarginBottom(20));
+    //         addStudentsTable(document, students);
 
-            document.close();
+    //         document.close();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            headers.setContentDispositionFormData("attachment", "report.pdf");
+    //         HttpHeaders headers = new HttpHeaders();
+    //         headers.setContentType(MediaType.APPLICATION_PDF);
+    //         headers.setContentDispositionFormData("attachment", "report.pdf");
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(baos.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+    //         return ResponseEntity.ok()
+    //                 .headers(headers)
+    //                 .body(baos.toByteArray());
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    //     }
+    // }
 
-    private void addInternshipsTable(Document document, List<Internship> internships) {
-        Table table = new Table(UnitValue.createPercentArray(new float[]{1, 3})).useAllAvailableWidth();
-        table.addHeaderCell(new Cell().add(new Paragraph("ID").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Title").setBold()));
-        for (Internship internship : internships) {
-            table.addCell(new Cell().add(new Paragraph(String.valueOf(internship.getId()))));
-            table.addCell(new Cell().add(new Paragraph(internship.getTitle())));
-        }
-        document.add(table);
-    }
+    // private void addInternshipsTable(Document document, List<Internship> internships) {
+    //     Table table = new Table(UnitValue.createPercentArray(new float[]{1, 3})).useAllAvailableWidth();
+    //     table.addHeaderCell(new Cell().add(new Paragraph("ID").setBold()));
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Title").setBold()));
+    //     for (Internship internship : internships) {
+    //         table.addCell(new Cell().add(new Paragraph(String.valueOf(internship.getId()))));
+    //         table.addCell(new Cell().add(new Paragraph(internship.getTitle())));
+    //     }
+    //     document.add(table);
+    // }
 
-    private void addFeedbacksTable(Document document, List<Feedback> feedbacks) {
-        Table table = new Table(UnitValue.createPercentArray(new float[]{1, 4, 1})).useAllAvailableWidth();
-        table.addHeaderCell(new Cell().add(new Paragraph("ID").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Comment").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Rating").setBold()));
-        for (Feedback feedback : feedbacks) {
-            table.addCell(new Cell().add(new Paragraph(String.valueOf(feedback.getId()))));
-            table.addCell(new Cell().add(new Paragraph(feedback.getComment())));
-            table.addCell(new Cell().add(new Paragraph(String.valueOf(feedback.getRating()))));
-        }
-        document.add(table);
-    }
+    // private void addFeedbacksTable(Document document, List<Feedback> feedbacks) {
+    //     Table table = new Table(UnitValue.createPercentArray(new float[]{1, 4, 1})).useAllAvailableWidth();
+    //     table.addHeaderCell(new Cell().add(new Paragraph("ID").setBold()));
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Comment").setBold()));
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Rating").setBold()));
+    //     for (Feedback feedback : feedbacks) {
+    //         table.addCell(new Cell().add(new Paragraph(String.valueOf(feedback.getId()))));
+    //         table.addCell(new Cell().add(new Paragraph(feedback.getComment())));
+    //         table.addCell(new Cell().add(new Paragraph(String.valueOf(feedback.getRating()))));
+    //     }
+    //     document.add(table);
+    // }
 
-    private void addTopInternshipsTable(Document document, List<TopInternshipDTO> internships) {
-        Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2})).useAllAvailableWidth();
-        table.addHeaderCell(new Cell().add(new Paragraph("Category").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Title").setBold()));
-        for (TopInternshipDTO internship : internships) {
-            table.addCell(new Cell().add(new Paragraph(internship.getCategoryName().toString())));
-            table.addCell(new Cell().add(new Paragraph(internship.getTopInternshipTitle())));
-        }
-        document.add(table);
-    }
+    // private void addTopInternshipsTable(Document document, List<TopInternshipDTO> internships) {
+    //     Table table = new Table(UnitValue.createPercentArray(new float[]{2, 2})).useAllAvailableWidth();
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Category").setBold()));
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Title").setBold()));
+    //     for (TopInternshipDTO internship : internships) {
+    //         table.addCell(new Cell().add(new Paragraph(internship.getCategoryName().toString())));
+    //         table.addCell(new Cell().add(new Paragraph(internship.getTopInternshipTitle())));
+    //     }
+    //     document.add(table);
+    // }
 
-    private void addStudentsTable(Document document, List<Student> students) {
-        Table table = new Table(UnitValue.createPercentArray(new float[]{1, 2, 2, 2, 1})).useAllAvailableWidth();
-        table.addHeaderCell(new Cell().add(new Paragraph("ID").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Name").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Last Name").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Username").setBold()));
-        table.addHeaderCell(new Cell().add(new Paragraph("Average Grade").setBold()));
-        for (Student student : students) {
-            table.addCell(new Cell().add(new Paragraph(String.valueOf(student.getId()))));
-            table.addCell(new Cell().add(new Paragraph(student.getName())));
-            table.addCell(new Cell().add(new Paragraph(student.getLastName())));
-            table.addCell(new Cell().add(new Paragraph(student.getUsername())));
-            table.addCell(new Cell().add(new Paragraph(String.valueOf(student.getAverageGrade()))));
-        }
-        document.add(table);
-    }
+    // private void addStudentsTable(Document document, List<Student> students) {
+    //     Table table = new Table(UnitValue.createPercentArray(new float[]{1, 2, 2, 2, 1})).useAllAvailableWidth();
+    //     table.addHeaderCell(new Cell().add(new Paragraph("ID").setBold()));
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Name").setBold()));
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Last Name").setBold()));
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Username").setBold()));
+    //     table.addHeaderCell(new Cell().add(new Paragraph("Average Grade").setBold()));
+    //     for (Student student : students) {
+    //         table.addCell(new Cell().add(new Paragraph(String.valueOf(student.getId()))));
+    //         table.addCell(new Cell().add(new Paragraph(student.getName())));
+    //         table.addCell(new Cell().add(new Paragraph(student.getLastName())));
+    //         table.addCell(new Cell().add(new Paragraph(student.getUsername())));
+    //         table.addCell(new Cell().add(new Paragraph(String.valueOf(student.getAverageGrade()))));
+    //     }
+    //     document.add(table);
+    // }
 }

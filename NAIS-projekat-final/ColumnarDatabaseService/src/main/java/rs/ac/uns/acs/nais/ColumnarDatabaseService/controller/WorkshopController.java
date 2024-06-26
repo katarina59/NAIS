@@ -34,6 +34,8 @@ public class WorkshopController {
     }
 
 
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<WorkshopDTO> deleteWorkshop(@PathVariable Long id){
         return new ResponseEntity<>(workshopService.deleteWorkshop(id), HttpStatus.OK);
@@ -71,14 +73,21 @@ public class WorkshopController {
     }
 
     @GetMapping(value = "/export-workshop-pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportWorkshopPdf(@PathVariable Long id) {
+    public ResponseEntity<byte[]> exportWorkshopPdf(@PathVariable Long id) throws IOException {
         WorkshopWithGenderPercentageDTO dto = workshopService.getWorkshopWithGenderPercentage(id);
         try {
             byte[] pdfContents = workshopService.exportWorkshopStatistics(dto);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("attachment", "workshop_statistics.pdf");
-          
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(pdfContents);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
     @GetMapping(value="/WorkshopPDFSimple", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> generatePDF(){
         List<WorkshopDTO> dtos = workshopService.getWorkshopsForReport();
@@ -101,4 +110,4 @@ public class WorkshopController {
     }
 
 
-}
+

@@ -98,7 +98,7 @@ public class UserService {
             stat.setLastName(user.getLastName());
             return stat;
         }).collect(Collectors.toList());
-
+    }
     public UserDTO getUserDataByFinalGrade(){
             Double max_final_grade = feedbackWorkshopRepository.getMaxFinalGrade();
             Long user_id = feedbackWorkshopRepository.getUserIdByFinalGrade(max_final_grade);

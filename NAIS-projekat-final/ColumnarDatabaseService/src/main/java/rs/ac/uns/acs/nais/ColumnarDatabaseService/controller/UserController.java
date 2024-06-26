@@ -50,6 +50,7 @@ public class UserController {
     @GetMapping("/user-session-statistics")
     public List<UserSessionStatisticsDTO> getUserSessionStatistics() {
         return userService.getUserSessionStatistics();
+    }
     @GetMapping("/getByFinalGrade")
     public ResponseEntity<UserDTO> getUserDataByFinalGrade(){
         return new ResponseEntity<>(userService.getUserDataByFinalGrade(), HttpStatus.OK);

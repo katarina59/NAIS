@@ -5,6 +5,7 @@ import org.springframework.data.cassandra.core.cql.CqlTemplate;
 import org.springframework.data.cassandra.core.cql.PreparedStatementCreator;
 import org.springframework.data.cassandra.core.cql.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopsUserCountDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.UserWorkshopRepositoryCustom;
 
@@ -32,4 +33,22 @@ public class UserWorkshopRepositoryCustomImpl implements UserWorkshopRepositoryC
                 });
         return dtos;
     }
+
+    @Override
+    public List<UserSessionStatisticsDTO> findUserSessionStatistics() {
+        String query = "SELECT user_id, COUNT(workshop_id) AS total_sessions, AVG(session_duration) AS avg_session_duration " +
+                "FROM user_workshop GROUP BY workshop_id ALLOW FILTERING";
+
+        List<UserSessionStatisticsDTO> results = new ArrayList<>();
+        template.query(query, (RowCallbackHandler) row -> {
+            UserSessionStatisticsDTO dto = new UserSessionStatisticsDTO();
+            dto.setUserId(row.getLong("user_id"));
+            dto.setTotalSessions(row.getLong("total_sessions"));
+            dto.setAvgSessionDuration(row.getInt("avg_session_duration"));
+            dto.setUserId(row.getLong("user_id"));
+            results.add(dto);
+        });
+        return results;
+    }
+
 }
