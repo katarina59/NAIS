@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.acs.nais.GraphDatabaseService.model.Internship;
-import rs.ac.uns.acs.nais.GraphDatabaseService.model.Psychologist;
-import rs.ac.uns.acs.nais.GraphDatabaseService.model.Student;
+import rs.ac.uns.acs.nais.GraphDatabaseService.model.*;
+import rs.ac.uns.acs.nais.GraphDatabaseService.model.enums.Status;
 import rs.ac.uns.acs.nais.GraphDatabaseService.service.impl.StudentService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -98,6 +98,72 @@ public class StudentController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(student, HttpStatus.OK);
+    }
+
+    @PostMapping("/{studentId}/apply/{internshipId}")
+    public ResponseEntity<Student> applyForInternship(
+            @PathVariable Long studentId,
+            @PathVariable Long internshipId,
+            @RequestParam(required = false) LocalDate applicationDate,
+            @RequestParam(required = false) Status status) {
+        Student updatedStudent = studentService.applyForInternship(studentId, internshipId, applicationDate, status);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    @GetMapping("/{studentId}/applications")
+    public ResponseEntity<List<AppliesFor>> getAllInternshipApplications(@PathVariable Long studentId) {
+        List<AppliesFor> applications = studentService.getAllInternshipApplications(studentId);
+        return ResponseEntity.ok(applications);
+    }
+
+    @PutMapping("/{studentId}/update-application/{internshipId}")
+    public ResponseEntity<Student> updateInternshipApplication(
+            @PathVariable Long studentId,
+            @PathVariable Long internshipId,
+            @RequestParam(required = false) LocalDate applicationDate,
+            @RequestParam(required = false) Status status) {
+        Student updatedStudent = studentService.updateInternshipApplication(studentId, internshipId, applicationDate, status);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    @DeleteMapping("/{studentId}/delete-application/{internshipId}")
+    public ResponseEntity<Student> deleteInternshipApplication(
+            @PathVariable Long studentId,
+            @PathVariable Long internshipId) {
+        Student updatedStudent = studentService.deleteInternshipApplication(studentId, internshipId);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    @PostMapping("/{studentId}/progress/{internshipProgressId}")
+    public ResponseEntity<Student> hasInternshipProgress(
+            @PathVariable Long studentId,
+            @PathVariable Long internshipProgressId,
+            @RequestParam(required = false) String roles) {
+        Student updatedStudent = studentService.hasInternshipProgress(studentId, internshipProgressId, roles);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    @GetMapping("/{studentId}/progresses")
+    public ResponseEntity<List<HasProgress>> getAllProgresses(@PathVariable Long studentId) {
+        List<HasProgress> progresses = studentService.getAllProgresses(studentId);
+        return ResponseEntity.ok(progresses);
+    }
+
+    @PutMapping("/{studentId}/update-progress/{internshipProgressId}")
+    public ResponseEntity<Student> updateProgress(
+            @PathVariable Long studentId,
+            @PathVariable Long internshipProgressId,
+            @RequestParam(required = false) String roles) {
+        Student updatedStudent = studentService.updateProgress(studentId, internshipProgressId, roles);
+        return ResponseEntity.ok(updatedStudent);
+    }
+
+    @DeleteMapping("/{studentId}/delete-progress/{internshipProgressId}")
+    public ResponseEntity<Student> deleteProgress(
+            @PathVariable Long studentId,
+            @PathVariable Long internshipProgressId) {
+        Student updatedStudent = studentService.deleteProgress(studentId, internshipProgressId);
+        return ResponseEntity.ok(updatedStudent);
     }
 
 }
