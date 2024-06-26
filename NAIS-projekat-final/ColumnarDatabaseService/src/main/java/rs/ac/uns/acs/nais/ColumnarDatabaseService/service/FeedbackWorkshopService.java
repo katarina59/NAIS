@@ -13,7 +13,9 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackAverageDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackCountByMaleDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackWorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopCountProjection;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.FeedbackWorkshop;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.User;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.FeedbackWorkshopRepository;
 
 import java.awt.*;
@@ -45,6 +47,8 @@ public class FeedbackWorkshopService {
         FeedbackWorkshopDTO feedbackWorkshopDTO= mapper.map(feedbackWorkshop, FeedbackWorkshopDTO.class);
         return feedbackWorkshopDTO;
     }
+
+
 
     public FeedbackWorkshopDTO create(FeedbackWorkshopDTO feedbackWorkshopDTO){
        FeedbackWorkshop feedbackWorkshop = mapToEntity(feedbackWorkshopDTO);
@@ -161,4 +165,10 @@ public class FeedbackWorkshopService {
     List<WorkshopCountProjection> countTotalAttendeesByWorkshopId(){
         return feedbackWorkshopRepository.countTotalAttendeesByWorkshop();
    }
+    public Long getUserByFinalGrade(){
+        Double max_finalGrade = feedbackWorkshopRepository.getMaxFinalGrade();
+        return feedbackWorkshopRepository.getUserIdByFinalGrade(max_finalGrade);
+    }
+
+
 }

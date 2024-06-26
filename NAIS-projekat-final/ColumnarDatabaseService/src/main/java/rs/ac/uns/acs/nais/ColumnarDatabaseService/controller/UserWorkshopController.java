@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserWorkshopDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopsUserCountDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.HallService;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.UserWorkshopService;
@@ -44,4 +45,8 @@ public class UserWorkshopController {
     }
 
 
+    @GetMapping("/attendeesByWorkshop")
+    public ResponseEntity<List<WorkshopsUserCountDTO>> getAttendeesByWorkshop(){
+        return  new ResponseEntity<>(userWorkshopService.getAttendeesByWorkshop(), HttpStatus.OK);
+    }
 }

@@ -10,6 +10,7 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.User;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.FeedbackWorkshopRepository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.HallRepository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.UserRepository;
 
@@ -24,9 +25,12 @@ public class UserService {
 
     @Autowired
     private UserWorkshopService userWorkshopService;
+    @Autowired
+  private FeedbackWorkshopRepository feedbackWorkshopRepository;
 
     @Autowired
     private ModelMapper mapper;
+  
         private User mapToEntity(UserDTO userDTO){
         User user = mapper.map(userDTO, User.class);
         return user;
@@ -94,5 +98,10 @@ public class UserService {
             stat.setLastName(user.getLastName());
             return stat;
         }).collect(Collectors.toList());
+
+    public UserDTO getUserDataByFinalGrade(){
+            Double max_final_grade = feedbackWorkshopRepository.getMaxFinalGrade();
+            Long user_id = feedbackWorkshopRepository.getUserIdByFinalGrade(max_final_grade);
+            return mapToDTO(userRepository.getUserDataByFinalGrade(user_id));
     }
 }

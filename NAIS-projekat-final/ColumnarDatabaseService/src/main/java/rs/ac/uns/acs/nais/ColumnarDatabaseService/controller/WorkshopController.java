@@ -78,6 +78,15 @@ public class WorkshopController {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDispositionFormData("attachment", "workshop_statistics.pdf");
+          
+    @GetMapping(value="/WorkshopPDFSimple", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> generatePDF(){
+        List<WorkshopDTO> dtos = workshopService.getWorkshopsForReport();
+        try {
+            byte[] pdfContents = workshopService.exportSimpleWorkshopReport(dtos);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "products.pdf");
 
             return ResponseEntity.ok()
                     .headers(headers)
@@ -87,5 +96,9 @@ public class WorkshopController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+
+    }
+
 
 }

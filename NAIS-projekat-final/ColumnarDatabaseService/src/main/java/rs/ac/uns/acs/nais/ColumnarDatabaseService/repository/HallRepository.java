@@ -12,9 +12,9 @@ import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Workshop;
 import java.util.List;
 
 @Repository
-public interface HallRepository extends CassandraRepository<Hall, Long>,HallCustom {
+public interface HallRepository extends CassandraRepository<Hall, Long>,HallCustom,HallRepositoryCustom {
 
-    @Query("SELECT * from halls WHERE hall_id = :id")
+    @Query("SELECT * from halls WHERE hall_id = :id allow filtering")
     Hall getById(@Param("id")Long id);
 
     @Query("SELECT min(booking_fee) from halls")
@@ -25,6 +25,8 @@ public interface HallRepository extends CassandraRepository<Hall, Long>,HallCust
 
     @Query("SELECT * FROM halls WHERE booking_fee >= ?0 AND booking_fee <= ?1 ALLOW FILTERING")
     List<Hall> findHallsWithBookingFeeRange(Double minPrice, Double maxPrice);
+    @Query("SELECT * FROM halls where events_count > 10  ALLOW FILTERING")
+    List<HallDTO> getHallsForReport();
 
 
 }

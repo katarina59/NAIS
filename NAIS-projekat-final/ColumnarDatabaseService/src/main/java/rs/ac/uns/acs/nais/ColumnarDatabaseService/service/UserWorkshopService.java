@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserWorkshopDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopsUserCountDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.UserWorkshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.HallRepository;
@@ -19,6 +20,9 @@ public class UserWorkshopService {
 
     @Autowired
     private UserWorkshopRepository userWorkshopRepository;
+
+    @Autowired
+    private WorkshopService workshopService;
 
     @Autowired
     private ModelMapper mapper;
@@ -69,3 +73,9 @@ public class UserWorkshopService {
     }
 
     }
+
+    public List<WorkshopsUserCountDTO> getAttendeesByWorkshop(){
+        List<Long> workshop_ids = workshopService.getWorkshopBycategory();
+        return userWorkshopRepository.getAttendeesByWorkshop(workshop_ids);
+    }
+}

@@ -8,11 +8,11 @@ import org.springframework.data.cassandra.core.mapping.Table;
 
 @Table("user_workshop")
 public class UserWorkshop {
-    @PrimaryKeyColumn(name = "user_id", type = PrimaryKeyType.PARTITIONED)
-    private Long userId;
-
-    @PrimaryKeyColumn(name = "workshop_id", ordinal = 0, ordering = Ordering.ASCENDING)
+    @PrimaryKeyColumn(name = "workshop_id", type = PrimaryKeyType.PARTITIONED)
     private Long workshopId;
+
+    @PrimaryKeyColumn(name = "user_id", ordinal = 0, ordering = Ordering.ASCENDING)
+    private Long userId;
 
     @Column("is_canceled")
     private boolean isCanceled;

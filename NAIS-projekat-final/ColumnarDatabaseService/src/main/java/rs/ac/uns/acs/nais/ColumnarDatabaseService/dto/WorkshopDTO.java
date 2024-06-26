@@ -24,9 +24,9 @@ public class WorkshopDTO {
 
     private LocalDate date;
 
-    private boolean is_online;
+    private Boolean is_online;
 
-    private double price;
+    private Double price;
 
     private Long psychologistId;
 
@@ -66,15 +66,19 @@ public class WorkshopDTO {
         this.date = date;
     }
 
-    public boolean isIs_online() {
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Boolean isIs_online() {
         return is_online;
     }
 
-    public void setIs_online(boolean is_online) {
+    public void setIs_online(Boolean is_online) {
         this.is_online = is_online;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
