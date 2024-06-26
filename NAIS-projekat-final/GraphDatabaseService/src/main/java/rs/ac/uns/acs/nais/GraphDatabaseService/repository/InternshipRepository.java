@@ -34,19 +34,12 @@ public interface InternshipRepository extends Neo4jRepository<Internship, Long> 
     List<Internship> findInternshipsByChildAndAdolescentPsycholog();
 
     @Query("MATCH (i:Internship)<-[:PART_OF]-(ip:InternshipProgress)<-[:HAS_PROGRESS]-(s:Student)-[:GIVES_FEEDBACK]->(f:Feedback) " +
-            "WITH AVG(f.rating) AS avgRating " +
-            "WITH i, avgRating, AVG(avgRating) AS globalAvgRating " +
-            "WHERE avgRating = globalAvgRating " +
+            "WITH SUM(f.rating) AS globSum, COUNT(f) AS globNum " +
+            "WITH globSum / globNum AS globAvg " +
+            "MATCH (i:Internship)<-[:PART_OF]-(ip:InternshipProgress)<-[:HAS_PROGRESS]-(s:Student)-[:GIVES_FEEDBACK]->(f:Feedback) " +
+            "WITH i, globAvg, AVG(f.rating) AS avgRating " +
+            "WHERE avgRating > globAvg " +
             "RETURN i")
     List<Internship> recommendInternshipsByRating();
-
-//    @Query("MATCH (i:Internship)<-[:PART_OF]-(ip:InternshipProgress)<-[:HAS_PROGRESS]-(s:Student)-[:GIVES_FEEDBACK]->(f:Feedback) " +
-//            "WITH SUM(f.rating) AS globSum, COUNT(f) AS globNum " +
-//            "WITH globSum / globNum AS globAvg " +
-//            "MATCH (i)<-[:PART_OF]-(ip)-[:HAS_PROGRESS]->(s)-[:GIVES_FEEDBACK]->(f) " +
-//            "WITH i, globAvg, AVG(f.rating) AS avgRating " +
-//            "WHERE avgRating < globAvg " +
-//            "RETURN i")
-//    List<Internship> recommendInternshipsByRating();
 
 }
