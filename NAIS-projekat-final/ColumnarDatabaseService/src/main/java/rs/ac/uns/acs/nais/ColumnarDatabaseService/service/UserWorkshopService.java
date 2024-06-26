@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserWorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopsUserCountDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
@@ -63,6 +64,15 @@ public class UserWorkshopService {
 
     }
 
+    List<Long> findUserIdsByWorkshopId(Long workshopId){
+        return userWorkshopRepository.findUserIdsByWorkshopId(workshopId);
+    }
+
+    public List<UserSessionStatisticsDTO> findUserSessionStatistics() {
+        return userWorkshopRepository.findUserSessionStatistics();
+    }
+
+    }
 
     public List<WorkshopsUserCountDTO> getAttendeesByWorkshop(){
         List<Long> workshop_ids = workshopService.getWorkshopBycategory();

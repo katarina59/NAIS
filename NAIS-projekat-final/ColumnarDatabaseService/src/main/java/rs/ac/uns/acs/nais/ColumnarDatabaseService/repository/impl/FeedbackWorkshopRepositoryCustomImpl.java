@@ -7,6 +7,7 @@ import org.springframework.data.cassandra.core.cql.*;
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackAverageDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.FeedbackCountByMaleDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopCountProjection;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.repository.FeedbackWorkshopRepositoryCustom;
 
 import java.math.BigInteger;
@@ -56,4 +57,35 @@ public class FeedbackWorkshopRepositoryCustomImpl implements FeedbackWorkshopRep
 
         return dto;
     }
+
+    @Override
+    public List<WorkshopCountProjection> countRecommendedByWorkshop() {
+        String query = "SELECT workshop_id AS workshopId, COUNT(*) AS count FROM feedbacks WHERE recommended = true GROUP BY workshop_id ALLOW FILTERING";
+        return mapToWorkshopCountProjection(query);
+    }
+
+    @Override
+    public List<WorkshopCountProjection> countNotRecommendedByWorkshop() {
+        String query = "SELECT workshop_id AS workshopId, COUNT(*) AS count FROM feedbacks WHERE recommended = false GROUP BY workshop_id ALLOW FILTERING";
+        return mapToWorkshopCountProjection(query);
+    }
+
+    @Override
+    public List<WorkshopCountProjection> countTotalAttendeesByWorkshop() {
+        String query = "SELECT workshop_id AS workshopId, COUNT(*) AS count FROM feedbacks GROUP BY workshop_id ALLOW FILTERING";
+        return mapToWorkshopCountProjection(query);
+    }
+
+    private List<WorkshopCountProjection> mapToWorkshopCountProjection(String query) {
+        List<WorkshopCountProjection> results = new ArrayList<>();
+        template.query(query, row -> {
+            WorkshopCountProjection dto = new WorkshopCountProjection();
+            dto.setWorkshopId(row.getLong("workshopId"));
+            dto.setCount(row.getLong("count"));
+            results.add(dto);
+        });
+
+        return results;
+    }
+
 }

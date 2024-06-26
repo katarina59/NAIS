@@ -7,9 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.OrderDTO;
-import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDTO;
-import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDateDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.*;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Workshop;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.WorkshopService;
 
 import java.io.IOException;
@@ -45,6 +44,41 @@ public class WorkshopController {
         return  new ResponseEntity<>(workshopService.getByHall(), HttpStatus.OK);
     }
 
+    @GetMapping("/hallAndCount")
+    public ResponseEntity<MaxCapacityHallWorkshopCountDTO> getWorkshopCountForMaxCapacityHall(
+            @RequestParam(name = "minBookingFee") Double minBookingFee,
+            @RequestParam(name = "maxBookingFee") Double maxBookingFee) {
+        System.out.println("minBookingFee: " + minBookingFee);
+        System.out.println("maxBookingFee: " + maxBookingFee);
+
+        MaxCapacityHallWorkshopCountDTO result = workshopService.getWorkshopCountForMaxCapacityHall(minBookingFee, maxBookingFee);
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/workshopWithGenderPercentage")
+    public ResponseEntity<WorkshopWithGenderPercentageDTO> getWorkshopWithGenderPercentage(
+            @RequestParam Long workshopId) {
+        WorkshopWithGenderPercentageDTO result = workshopService.getWorkshopWithGenderPercentage(workshopId);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/recommendations")
+    public List<WorkshopRecommendation> getWorkshopsRecommendation() {
+        return workshopService.getWorkshopsRecommendation();
+    }
+
+    @GetMapping(value = "/export-workshop-pdf/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportWorkshopPdf(@PathVariable Long id) {
+        WorkshopWithGenderPercentageDTO dto = workshopService.getWorkshopWithGenderPercentage(id);
+        try {
+            byte[] pdfContents = workshopService.exportWorkshopStatistics(dto);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "workshop_statistics.pdf");
+          
     @GetMapping(value="/WorkshopPDFSimple", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> generatePDF(){
         List<WorkshopDTO> dtos = workshopService.getWorkshopsForReport();
@@ -61,6 +95,8 @@ public class WorkshopController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
+    }
+
 
     }
 

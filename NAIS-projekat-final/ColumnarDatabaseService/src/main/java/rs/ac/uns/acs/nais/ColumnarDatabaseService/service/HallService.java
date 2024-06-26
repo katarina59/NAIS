@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.LocationStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.entity.Hall;
@@ -30,6 +31,8 @@ public class HallService {
 
     @Autowired
     private HallRepository hallRepository;
+
+
 
     @Autowired
     private ModelMapper mapper;
@@ -79,6 +82,23 @@ public class HallService {
         Double price =  hallRepository.getLowestPrice();
         return hallRepository.getCheapestHall(price);
     }
+
+    public HallDTO getHall(Long id){
+        return mapToDTO(hallRepository.getById(id));
+    }
+
+    public List<HallDTO> findHallsWithBookingFeeRange(Double minPrice, Double maxPrice){
+        List<Hall> halls = hallRepository.findHallsWithBookingFeeRange(minPrice, maxPrice);
+        return halls.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public HallStatisticsDTO getHallStatisticsByLocation(String location) {
+
+        return hallRepository.findHallStatisticsByLocation(location);
+    }
+
 
     public List<LocationStatisticsDTO> getLocationstatistics(){
         return hallRepository.getLocationStatistics();

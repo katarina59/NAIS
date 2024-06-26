@@ -7,6 +7,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallStatisticsDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.HallService;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.LocationStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.WorkshopDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.HallService;
@@ -49,6 +55,12 @@ public class HallController {
         return new ResponseEntity<>(hallService.getCheapestHall(), HttpStatus.OK);
     }
 
+
+    @GetMapping("/statistics/{location}")
+    public HallStatisticsDTO getHallStatistics(@PathVariable String location) {
+        String decodedLocation = URLDecoder.decode(location, StandardCharsets.UTF_8);
+        return hallService.getHallStatisticsByLocation(decodedLocation);
+      
     @GetMapping("/locationStatistics")
     public ResponseEntity<List<LocationStatisticsDTO>> getLocationStatistics(){
         return new ResponseEntity<>(hallService.getLocationstatistics(), HttpStatus.OK);
@@ -72,3 +84,4 @@ public class HallController {
         }
     }
 }
+

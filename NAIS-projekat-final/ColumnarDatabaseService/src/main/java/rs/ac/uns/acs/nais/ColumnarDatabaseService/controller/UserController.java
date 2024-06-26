@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.HallDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserDTO;
+import rs.ac.uns.acs.nais.ColumnarDatabaseService.dto.UserSessionStatisticsDTO;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.HallService;
 import rs.ac.uns.acs.nais.ColumnarDatabaseService.service.UserService;
 
@@ -46,6 +47,9 @@ public class UserController {
         return  new ResponseEntity<>(userService.getMaleUsers(), HttpStatus.OK);
     }
 
+    @GetMapping("/user-session-statistics")
+    public List<UserSessionStatisticsDTO> getUserSessionStatistics() {
+        return userService.getUserSessionStatistics();
     @GetMapping("/getByFinalGrade")
     public ResponseEntity<UserDTO> getUserDataByFinalGrade(){
         return new ResponseEntity<>(userService.getUserDataByFinalGrade(), HttpStatus.OK);
